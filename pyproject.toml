@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "radiomp3-decoder"
+version = "0.1.0"
+description = "Decoder für r@dio.mp3 / MEGARADIO.mp3: MP3s aus der Austastlücke (TV Radio Cast, 2000–2003)"
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+dependencies = []
+
+[project.optional-dependencies]
+vbi = ["numpy"]
+
+[project.scripts]
+radiomp3 = "radiomp3.cli:main"
+
+[tool.setuptools]
+packages = ["radiomp3"]

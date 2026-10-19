@@ -1,0 +1,6 @@
+__pycache__/
+*.egg-info/
+.pytest_cache/
+radiomp3-out/
+*.t42
+!tests/data/*.t42
