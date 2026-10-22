@@ -6,7 +6,8 @@ is split into 64 columns of 14 bytes. For column c the 13 data rows give a
 parity area (rows 14 and 15). That is RS(210,182), interleaved by column.
 
 Data row:
-    0..9    header, every byte XORed with 0xA5
+    0..9    header, every byte XORed with 0xA5 (player 1.2.0.6; a VHS
+            recording of an earlier broadcast has the header in plain)
               0..1  id (little-endian)
               2..5  offset (little-endian)
               6..9  total length (little-endian)
@@ -84,8 +85,9 @@ CW_OFFSETS = [_cw_offsets(c) for c in range(COLUMNS)]
 
 
 class SuperblockDecoder:
-    def __init__(self, use_erasures=True):
+    def __init__(self, use_erasures=True, header_xor=HEADER_XOR):
         self.use_erasures = use_erasures
+        self.header_xor = header_xor
         self.stats = FecStats()
 
     def decode(self, sb):
@@ -136,7 +138,7 @@ class SuperblockDecoder:
                 else:
                     st.rows_bad_after += 1
                     continue
-            chunk = parse_row(row, r + 1)
+            chunk = parse_row(row, r + 1, self.header_xor)
             if chunk is None:
                 st.rows_skipped += 1
                 continue
@@ -171,8 +173,8 @@ class SuperblockDecoder:
         return None
 
 
-def parse_row(row, row_index=0):
-    hdr = bytes(b ^ HEADER_XOR for b in row[:10])
+def parse_row(row, row_index=0, header_xor=HEADER_XOR):
+    hdr = bytes(b ^ header_xor for b in row[:10])
     ident, offset, total = struct.unpack("<HII", hdr)
     remaining = total - offset
     if ident == IGNORED_ID:

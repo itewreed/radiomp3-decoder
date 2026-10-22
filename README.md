@@ -45,6 +45,7 @@ Optionen für `decode`:
 | `--format auto\|t42\|vbi` | Eingabeformat (Standard: nach Dateiendung) |
 | `--vbi-samples`, `--vbi-rate`, `--vbi-offset` | Zeilenlänge, Abtastrate und Kopfbytes der VBI-Rohdaten |
 | `--no-erasures` | nur Fehlerkorrektur wie der Original-Player |
+| `--plain-header` | Zeilenkopf ohne XOR 0xA5, so in einer VHS-Aufnahme von NBC GIGA gesehen |
 | `--strict-hamming` | Hamming 8/4 ohne Einzelbitkorrektur, wie der Player |
 
 ## Wie gut ist das abgesichert?

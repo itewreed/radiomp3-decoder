@@ -19,7 +19,8 @@ def cmd_decode(args):
         source = read_t42(args.input)
 
     pages = PageAssembler(correct_hamming=not args.strict_hamming)
-    fec = SuperblockDecoder(use_erasures=not args.no_erasures)
+    fec = SuperblockDecoder(use_erasures=not args.no_erasures,
+                            header_xor=0 if args.plain_header else 0xA5)
     sink = Sink(args.output)
 
     def handle(sbs):
@@ -84,6 +85,8 @@ def main(argv=None):
     d.add_argument("--vbi-rate", type=float, default=35_468_950.0, help="Abtastrate in Hz (Standard: bttv PAL)")
     d.add_argument("--vbi-offset", type=int, default=0, help="Bytes am Dateianfang überspringen")
     d.add_argument("--no-erasures", action="store_true", help="nur Fehlerkorrektur wie der Original-Player")
+    d.add_argument("--plain-header", action="store_true",
+                   help="Zeilenkopf ohne XOR 0xA5 (ältere Sendungen)")
     d.add_argument("--strict-hamming", action="store_true", help="Hamming 8/4 ohne Einzelbitkorrektur (wie der Player)")
     d.set_defaults(func=cmd_decode)
 

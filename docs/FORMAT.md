@@ -36,7 +36,7 @@ Rekonstruiert durch statische Analyse von `Megaradio.mp3.exe` 1.2.0.6 (RapidSolu
 
 | Byte | Inhalt |
 |---|---|
-| 0–9 | Kopf, jedes Byte XOR 0xA5 |
+| 0–9 | Kopf, jedes Byte XOR 0xA5 (in einer VHS-Aufnahme von NBC GIGA unverschleiert, siehe unten) |
 | | 0–1 Kennung (u16 LE) |
 | | 2–5 Position (u32 LE) |
 | | 6–9 Gesamtlänge (u32 LE) |
@@ -53,6 +53,10 @@ Verteilung (`0x432db0` ff.):
 - Blowfish, ECB, 8-Byte-Blöcke (`0x447be0`, `0x447fe0`, `0x448670`).
 - Pro Titel ein 72-Byte-Schlüssel aus einer `.key`-Datei. Er ist seinerseits mit einem Blowfish-Schlüssel aus dem Hardware-Fingerabdruck des registrierten Rechners verschlüsselt (MAC über NetBIOS, BIOS, Festplatte, Registrierungsdaten; `0x434140`).
 - Den Titel findet der Player über eine 5-Byte-Track-ID im Datenstrom.
+
+## Beobachtung in einer echten Aufnahme
+
+Eine VHS-Aufnahme von NBC GIGA (Kopfzeile „8xx Data … 22:07“) zeigt Magazin 8, Zeilenindex 1–15 und einen pro Superblock hochzählenden aux-Wert wie oben beschrieben. Der Zeilenkopf ist dort aber **nicht** mit 0xA5 verschleiert: roh gelesen ergibt er stimmig Kennung 6502, Gesamtlänge 3.725.816 und Positionen um 2,4–3,0 MB. Dafür gibt es `--plain-header`.
 
 ## Offene Punkte
 
